@@ -1,35 +1,26 @@
-public class Paciente {
-    public String nome;
-    public String cpf;
+public class Paciente extends Pessoa {
     public int idade;
-    public String telefone;
     public String convenioNome;
     public boolean ativo;
 
-    public Paciente(String nome, String cpf) {
-        this.nome = nome;
-        this.cpf = cpf;
+    public Paciente(String nome, String cpf, String telefone, String dataNascimento) {
+        super(nome, cpf, telefone, dataNascimento);
         this.idade = 0;
-        this.telefone = "";
         this.convenioNome = "";
         this.ativo = true;
     }
 
-    public Paciente(String nome, String cpf, int idade, String telefone) {
-        this.nome = nome;
-        this.cpf = cpf;
+    public Paciente(String nome, String cpf, String telefone, String dataNascimento, int idade) {
+        super(nome, cpf, telefone, dataNascimento);
         this.idade = idade;
-        this.telefone = telefone;
         this.convenioNome = "";
         this.ativo = true;
     }
 
     // construtor com todos os dados
-    public Paciente(String nome, String cpf, int idade, String telefone, String convenioNome) {
-        this.nome = nome;
-        this.cpf = cpf;
+    public Paciente(String nome, String cpf, String telefone, String dataNascimento, int idade, String convenioNome) {
+        super(nome, cpf, telefone, dataNascimento);
         this.idade = idade;
-        this.telefone = telefone;
         this.convenioNome = convenioNome;
         this.ativo = true;
     }

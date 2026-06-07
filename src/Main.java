@@ -81,6 +81,10 @@ public class Main {
         String nome = sc.nextLine();
         System.out.print("CPF: ");
         String cpf = sc.nextLine();
+        System.out.print("Telefone: "); 
+        String tel = sc.nextLine();
+        System.out.print("Data de Nascimento (DD/MM/AAAA): "); 
+        String dataNasc = sc.nextLine();
 
         // verifica se ja existe
         if (buscarIndicePaciente(cpf) != -1) {
@@ -92,21 +96,17 @@ public class Main {
         int tipo = Integer.parseInt(sc.nextLine());
 
         if (tipo == 1) {
-            pacientes[totalPacientes] = new Paciente(nome, cpf);
+            pacientes[totalPacientes] = new Paciente(nome, cpf, tel, dataNasc);
         } else if (tipo == 2) {
             System.out.print("Idade: ");
             int idade = Integer.parseInt(sc.nextLine());
-            System.out.print("Telefone: ");
-            String tel = sc.nextLine();
-            pacientes[totalPacientes] = new Paciente(nome, cpf, idade, tel);
+            pacientes[totalPacientes] = new Paciente(nome, cpf, tel, dataNasc, idade);
         } else {
             System.out.print("Idade: ");
             int idade = Integer.parseInt(sc.nextLine());
-            System.out.print("Telefone: ");
-            String tel = sc.nextLine();
             System.out.print("Convenio: ");
             String conv = sc.nextLine();
-            pacientes[totalPacientes] = new Paciente(nome, cpf, idade, tel, conv);
+            pacientes[totalPacientes] = new Paciente(nome, cpf, tel, dataNasc, idade, conv);
         }
         totalPacientes++;
         System.out.println("Paciente cadastrado com sucesso!");

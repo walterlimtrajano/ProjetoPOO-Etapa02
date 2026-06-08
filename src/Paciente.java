@@ -28,13 +28,13 @@ public class Paciente extends Pessoa {
     // atualiza so idade e telefone
     public void complementar(int idade, String telefone) {
         this.idade = idade;
-        this.telefone = telefone;
+        this.setTelefone(telefone);
     }
 
     // atualiza tudo incluindo convenio
     public void complementar(int idade, String telefone, String convenioNome) {
         this.idade = idade;
-        this.telefone = telefone;
+        this.setTelefone(telefone);
         this.convenioNome = convenioNome;
     }
 
@@ -47,8 +47,8 @@ public class Paciente extends Pessoa {
         if (!ativo) {
             status = "Nao";
         }
-        return "Nome: " + nome + " | CPF: " + cpf + " | Idade: " + idade
-                + " | Tel: " + telefone + " | Convenio: " + convenioNome
+        return "Nome: " + this.getNome() + " | CPF: " + this.getCpf() + " | Idade: " + this.idade
+                + " | Tel: " + this.getTelefone() + " | Convenio: " + this.convenioNome
                 + " | Ativo: " + status;
     }
 }

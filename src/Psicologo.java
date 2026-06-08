@@ -1,5 +1,5 @@
 public class Psicologo extends Profissional {
-    public String crp;
+    private String crp;
 
     public Psicologo(String nome, String cpf, String telefone, String dataNascimento, 
                      String registroProfissional, double valorConsulta, String crp) {
@@ -10,5 +10,13 @@ public class Psicologo extends Profissional {
     @Override
     public String exibirResumo() {
         return super.exibirResumo() + " | CRP: " + crp;
+    }
+
+    public String getCrp() {
+        return crp;
+    }
+
+    public void setCrp(String crp) {
+        this.crp = crp;
     }
 }

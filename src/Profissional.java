@@ -1,9 +1,9 @@
 public abstract class Profissional extends Pessoa {
-    public String especialidade;
-    public String registroProfissional;
-    public double valorConsulta;
-    public String[] diasDisponiveis;
-    public int totalDias;
+    private String especialidade;
+    private String registroProfissional;
+    private double valorConsulta;
+    private String[] diasDisponiveis;
+    private int totalDias;
 
     // so nome e especialidade
     public Profissional(String nome, String cpf, String telefone, String dataNascimento, String especialidade) {
@@ -77,7 +77,47 @@ public abstract class Profissional extends Pessoa {
             if (i > 0) dias = dias + ", ";
             dias = dias + diasDisponiveis[i];
         }
-        return "Nome: " + nome + " | Espec: " + especialidade + " | Reg: " + registroProfissional
+        return "Nome: " + getNome() + " | Espec: " + especialidade + " | Reg: " + registroProfissional
                 + " | Valor: R$" + valorConsulta + " | Dias: " + dias;
+    }
+
+    public String getEspecialidade() {
+        return especialidade;
+    }
+
+    public void setEspecialidade(String especialidade) {
+        this.especialidade = especialidade;
+    }
+
+    public String getRegistroProfissional() {
+        return registroProfissional;
+    }
+
+    public void setRegistroProfissional(String registroProfissional) {
+        this.registroProfissional = registroProfissional;
+    }
+
+    public double getValorConsulta() {
+        return valorConsulta;
+    }
+
+    public void setValorConsulta(double valorConsulta) {
+        this.valorConsulta = valorConsulta;
+    }
+
+    public String[] getDiasDisponiveis() {
+        return diasDisponiveis;
+    }
+
+    public void setDiasDisponiveis(String[] diasDisponiveis) {
+        this.diasDisponiveis = diasDisponiveis;
+    }
+
+    public int getTotalDias() {
+        return totalDias;
+    }
+
+    public void setTotalDias(int totalDias) {
+        this.totalDias = totalDias;
     }
 }

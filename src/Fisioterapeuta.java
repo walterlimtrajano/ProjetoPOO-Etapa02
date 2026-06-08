@@ -1,5 +1,5 @@
 public class Fisioterapeuta extends Profissional {
-    public String crefito;
+    private String crefito;
 
     public Fisioterapeuta(String nome, String cpf, String telefone, String dataNascimento, 
                           String registroProfissional, double valorConsulta, String crefito) {
@@ -10,5 +10,13 @@ public class Fisioterapeuta extends Profissional {
     @Override
     public String exibirResumo() {
         return super.exibirResumo() + " | CREFITO: " + crefito;
+    }
+
+    public String getCrefito() {
+        return crefito;
+    }
+
+    public void setCrefito(String crefito) {
+        this.crefito = crefito;
     }
 }

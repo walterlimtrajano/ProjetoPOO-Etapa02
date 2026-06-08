@@ -1,5 +1,5 @@
 public class Nutricionista extends Profissional {
-    public String crn;
+    private String crn;
 
     public Nutricionista(String nome, String cpf, String telefone, String dataNascimento, 
                          String registroProfissional, double valorConsulta, String crn) {
@@ -10,5 +10,13 @@ public class Nutricionista extends Profissional {
     @Override
     public String exibirResumo() {
         return super.exibirResumo() + " | CRN: " + crn;
+    }
+
+    public String getCrn() {
+        return crn;
+    }
+
+    public void setCrn(String crn) {
+        this.crn = crn;
     }
 }

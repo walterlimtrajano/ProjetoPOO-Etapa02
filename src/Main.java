@@ -204,7 +204,7 @@ public class Main {
         }
     }
 
-    public static void cadastrarProfissional() {
+public static void cadastrarProfissional() {
         System.out.print("Nome: ");
         String nome = sc.nextLine();
         System.out.print("CPF: ");
@@ -213,25 +213,38 @@ public class Main {
         String tel = sc.nextLine();
         System.out.print("Data de Nascimento: ");
         String dataNasc = sc.nextLine();
-        System.out.print("Especialidade (clinica geral/fisioterapia/psicologia/nutricao): ");
+        System.out.print("Especialidade (fisioterapia/psicologia): ");
         String esp = sc.nextLine();
 
         if (!Profissional.especialidadeValida(esp)) {
             System.out.println("Especialidade invalida!");
             return;
         }
-
+        
         System.out.print("Tipo (1-Minimo / 2-Com registro e valor / 3-Completo): ");
         int tipo = Integer.parseInt(sc.nextLine());
 
         if (tipo == 1) {
-            profissionais[totalProfissionais] = new Profissional(nome, cpf, tel, dataNasc, esp);
+            if (esp.equalsIgnoreCase("fisioterapia")) {
+                profissionais[totalProfissionais] = new Fisioterapeuta(nome, cpf, tel, dataNasc, "", 0, "");
+            } else {
+                profissionais[totalProfissionais] = new Psicologo(nome, cpf, tel, dataNasc, "", 0, "");
+            }
         } else if (tipo == 2) {
             System.out.print("Registro: ");
             String reg = sc.nextLine();
             System.out.print("Valor consulta: ");
             double valor = Double.parseDouble(sc.nextLine());
-            profissionais[totalProfissionais] = new Profissional(nome, cpf, tel, dataNasc, esp, reg, valor);
+            
+            if (esp.equalsIgnoreCase("fisioterapia")) {
+                System.out.print("CREFITO: ");
+                String crefito = sc.nextLine();
+                profissionais[totalProfissionais] = new Fisioterapeuta(nome, cpf, tel, dataNasc, reg, valor, crefito);
+            } else {
+                System.out.print("CRP: ");
+                String crp = sc.nextLine();
+                profissionais[totalProfissionais] = new Psicologo(nome, cpf, tel, dataNasc, reg, valor, crp);
+            }
         } else {
             System.out.print("Registro: ");
             String reg = sc.nextLine();
@@ -241,10 +254,23 @@ public class Main {
             int qtd = Integer.parseInt(sc.nextLine());
             String[] dias = new String[7];
             for (int i = 0; i < qtd; i++) {
-                System.out.print("Dia " + (i+1) + ": ");
+                System.out.print("Dia " + (i + 1) + ": ");
                 dias[i] = sc.nextLine();
             }
-            profissionais[totalProfissionais] = new Profissional(nome, cpf, tel, dataNasc, esp, reg, valor, dias, qtd);
+            
+            if (esp.equalsIgnoreCase("fisioterapia")) {
+                System.out.print("CREFITO: ");
+                String crefito = sc.nextLine();
+                Fisioterapeuta f = new Fisioterapeuta(nome, cpf, tel, dataNasc, reg, valor, crefito);
+                f.atualizar(reg, valor, dias, qtd);
+                profissionais[totalProfissionais] = f;
+            } else {
+                System.out.print("CRP: ");
+                String crp = sc.nextLine();
+                Psicologo p = new Psicologo(nome, cpf, tel, dataNasc, reg, valor, crp);
+                p.atualizar(reg, valor, dias, qtd);
+                profissionais[totalProfissionais] = p;
+            }
         }
         totalProfissionais++;
         System.out.println("Profissional cadastrado!");

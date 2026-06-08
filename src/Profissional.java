@@ -1,4 +1,4 @@
-public class Profissional extends Pessoa {
+public abstract class Profissional extends Pessoa {
     public String especialidade;
     public String registroProfissional;
     public double valorConsulta;

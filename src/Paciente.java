@@ -1,7 +1,7 @@
 public class Paciente extends Pessoa {
-    public int idade;
-    public String convenioNome;
-    public boolean ativo;
+    private int idade;
+    private String convenioNome;
+    private boolean ativo;
 
     public Paciente(String nome, String cpf, String telefone, String dataNascimento) {
         super(nome, cpf, telefone, dataNascimento);
@@ -50,5 +50,29 @@ public class Paciente extends Pessoa {
         return "Nome: " + this.getNome() + " | CPF: " + this.getCpf() + " | Idade: " + this.idade
                 + " | Tel: " + this.getTelefone() + " | Convenio: " + this.convenioNome
                 + " | Ativo: " + status;
+    }
+
+    public int getIdade() {
+        return this.idade;
+    }
+
+    public void setIdade(int idade) {
+        this.idade = idade;
+    }
+
+    public String getConvenioNome() {
+        return this.convenioNome;
+    }
+
+    public void setConvenioNome(String convenioNome) {
+        this.convenioNome = convenioNome;
+    }
+
+    public boolean isAtivo() {
+        return this.ativo;
+    }
+
+    public void setAtivo(boolean ativo) {
+        this.ativo = ativo;
     }
 }

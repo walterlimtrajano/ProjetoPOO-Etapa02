@@ -399,7 +399,7 @@ public static void cadastrarProfissional() {
             System.out.println("Paciente nao encontrado.");
             return;
         }
-        if (!pacientes[idxPac].ativo) {
+        if (!pacientes[idxPac].isAtivo()) {
             System.out.println("Paciente inativo. Nao e possivel agendar.");
             return;
         }
@@ -468,7 +468,7 @@ public static void cadastrarProfissional() {
             System.out.println("Paciente nao encontrado.");
             return;
         }
-        if (!pacientes[idxPac].ativo) {
+        if (!pacientes[idxPac].isAtivo()) {
             System.out.println("Paciente inativo. Nao e possivel agendar.");
             return;
         }
@@ -857,7 +857,7 @@ public static void cadastrarProfissional() {
         String cpfPac = consultas[idxConsulta].cpfPaciente;
         int idxPac = buscarIndicePaciente(cpfPac);
 
-        boolean temConvenio = !pacientes[idxPac].convenioNome.equals("");
+        boolean temConvenio = !pacientes[idxPac].getConvenioNome().equals("");
         boolean ehRetorno = consultas[idxConsulta].tipo.equals("retorno");
 
         double desconto = 0;

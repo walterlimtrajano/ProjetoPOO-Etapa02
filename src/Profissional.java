@@ -1,5 +1,4 @@
-public class Profissional {
-    public String nome;
+public class Profissional extends Pessoa {
     public String especialidade;
     public String registroProfissional;
     public double valorConsulta;
@@ -7,8 +6,8 @@ public class Profissional {
     public int totalDias;
 
     // so nome e especialidade
-    public Profissional(String nome, String especialidade) {
-        this.nome = nome;
+    public Profissional(String nome, String cpf, String telefone, String dataNascimento, String especialidade) {
+        super(nome, cpf, telefone, dataNascimento);
         this.especialidade = especialidade;
         this.registroProfissional = "";
         this.valorConsulta = 0;
@@ -16,8 +15,8 @@ public class Profissional {
         this.totalDias = 0;
     }
 
-    public Profissional(String nome, String especialidade, String registroProfissional, double valorConsulta) {
-        this.nome = nome;
+    public Profissional(String nome, String cpf, String telefone, String dataNascimento, String especialidade, String registroProfissional, double valorConsulta) {
+        super(nome, cpf, telefone, dataNascimento);
         this.especialidade = especialidade;
         this.registroProfissional = registroProfissional;
         this.valorConsulta = valorConsulta;
@@ -26,9 +25,9 @@ public class Profissional {
     }
 
     // construtor completo com dias
-    public Profissional(String nome, String especialidade, String registroProfissional,
+    public Profissional(String nome, String cpf, String telefone, String dataNascimento, String especialidade, String registroProfissional,
                         double valorConsulta, String[] dias, int totalDias) {
-        this.nome = nome;
+        super(nome, cpf, telefone, dataNascimento);
         this.especialidade = especialidade;
         this.registroProfissional = registroProfissional;
         this.valorConsulta = valorConsulta;

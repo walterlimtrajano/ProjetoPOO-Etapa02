@@ -213,7 +213,7 @@ public static void cadastrarProfissional() {
         String tel = sc.nextLine();
         System.out.print("Data de Nascimento: ");
         String dataNasc = sc.nextLine();
-        System.out.print("Especialidade (fisioterapia/psicologia): ");
+        System.out.print("Especialidade (clinica geral/fisioterapia/psicologia/nutricao): ");
         String esp = sc.nextLine();
 
         if (!Profissional.especialidadeValida(esp)) {
@@ -227,8 +227,12 @@ public static void cadastrarProfissional() {
         if (tipo == 1) {
             if (esp.equalsIgnoreCase("fisioterapia")) {
                 profissionais[totalProfissionais] = new Fisioterapeuta(nome, cpf, tel, dataNasc, "", 0, "");
-            } else {
+            } else if (esp.equalsIgnoreCase("psicologia")) {
                 profissionais[totalProfissionais] = new Psicologo(nome, cpf, tel, dataNasc, "", 0, "");
+            } else if (esp.equalsIgnoreCase("nutricao")) {
+                profissionais[totalProfissionais] = new Nutricionista(nome, cpf, tel, dataNasc, "", 0, "");
+            } else {
+                profissionais[totalProfissionais] = new ClinicoGeral(nome, cpf, tel, dataNasc, "", 0, "");
             }
         } else if (tipo == 2) {
             System.out.print("Registro: ");
@@ -240,10 +244,18 @@ public static void cadastrarProfissional() {
                 System.out.print("CREFITO: ");
                 String crefito = sc.nextLine();
                 profissionais[totalProfissionais] = new Fisioterapeuta(nome, cpf, tel, dataNasc, reg, valor, crefito);
-            } else {
+            } else if (esp.equalsIgnoreCase("psicologia")) {
                 System.out.print("CRP: ");
                 String crp = sc.nextLine();
                 profissionais[totalProfissionais] = new Psicologo(nome, cpf, tel, dataNasc, reg, valor, crp);
+            } else if (esp.equalsIgnoreCase("nutricao")) {
+                System.out.print("CRN: ");
+                String crn = sc.nextLine();
+                profissionais[totalProfissionais] = new Nutricionista(nome, cpf, tel, dataNasc, reg, valor, crn);
+            } else {
+                System.out.print("CRM: ");
+                String crm = sc.nextLine();
+                profissionais[totalProfissionais] = new ClinicoGeral(nome, cpf, tel, dataNasc, reg, valor, crm);
             }
         } else {
             System.out.print("Registro: ");
@@ -264,12 +276,24 @@ public static void cadastrarProfissional() {
                 Fisioterapeuta f = new Fisioterapeuta(nome, cpf, tel, dataNasc, reg, valor, crefito);
                 f.atualizar(reg, valor, dias, qtd);
                 profissionais[totalProfissionais] = f;
-            } else {
+            } else if (esp.equalsIgnoreCase("psicologia")) {
                 System.out.print("CRP: ");
                 String crp = sc.nextLine();
                 Psicologo p = new Psicologo(nome, cpf, tel, dataNasc, reg, valor, crp);
                 p.atualizar(reg, valor, dias, qtd);
                 profissionais[totalProfissionais] = p;
+            } else if (esp.equalsIgnoreCase("nutricao")) {
+                System.out.print("CRN: ");
+                String crn = sc.nextLine();
+                Nutricionista n = new Nutricionista(nome, cpf, tel, dataNasc, reg, valor, crn);
+                n.atualizar(reg, valor, dias, qtd);
+                profissionais[totalProfissionais] = n;
+            } else {
+                System.out.print("CRM: ");
+                String crm = sc.nextLine();
+                ClinicoGeral c = new ClinicoGeral(nome, cpf, tel, dataNasc, reg, valor, crm);
+                c.atualizar(reg, valor, dias, qtd);
+                profissionais[totalProfissionais] = c;
             }
         }
         totalProfissionais++;

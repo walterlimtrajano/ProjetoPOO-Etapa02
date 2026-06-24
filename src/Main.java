@@ -924,6 +924,7 @@ public static void cadastrarProfissional() {
             System.out.println("2 - Por profissional");
             System.out.println("3 - Por periodo");
             System.out.println("4 - Resumo financeiro");
+            System.out.println("5 - Relatorio Unificado de Cadastros");
             System.out.println("0 - Voltar");
             System.out.print("Opcao: ");
             op = Integer.parseInt(sc.nextLine());
@@ -946,6 +947,9 @@ public static void cadastrarProfissional() {
                     break;
                 case 4:
                     Relatorio.gerarResumoFinanceiro(consultas, totalConsultas, pagamentos, totalPagamentos, multas, totalMultas);
+                    break;
+                case 5:
+                    RelatorioUnificadoCadastros.gerar(pacientes, totalPacientes, profissionais, totalProfissionais);
                     break;
                 case 0: break;
                 default: System.out.println("Opcao invalida!"); break;

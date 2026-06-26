@@ -76,40 +76,58 @@ public class Main {
         }
     }
 
-    public static void cadastrarPaciente() {
-        System.out.print("Nome: ");
-        String nome = sc.nextLine();
-        System.out.print("CPF: ");
-        String cpf = sc.nextLine();
-        System.out.print("Telefone: "); 
-        String tel = sc.nextLine();
-        System.out.print("Data de Nascimento (DD/MM/AAAA): "); 
-        String dataNasc = sc.nextLine();
+  public static void cadastrarPaciente() {
+        System.out.println("\n CADASTRO COMPLETO");
+        boolean sucesso = false;
 
-        // verifica se ja existe
-        if (buscarIndicePaciente(cpf) != -1) {
-            System.out.println("CPF ja cadastrado!");
-            return;
-        }
+        try {
+            System.out.print("Nome: ");
+            String nome = sc.nextLine();
+            System.out.print("CPF (11 digitos): ");
+            String cpf = sc.nextLine();
+            
+           
+            if (cpf.length() != 11) {
+                throw new DadoInvalidoException("O CPF informado tem tamanho inválido!");
+            }
 
-        System.out.print("Tipo (1-Minimo / 2-Com idade e tel / 3-Completo): ");
-        int tipo = Integer.parseInt(sc.nextLine());
+            if (buscarIndicePaciente(cpf) != -1) {
+                System.out.println("Aviso: CPF ja cadastrado!");
+                return;
+            }
 
-        if (tipo == 1) {
-            pacientes[totalPacientes] = new Paciente(nome, cpf, tel, dataNasc);
-        } else if (tipo == 2) {
+            System.out.print("Telefone: "); 
+            String tel = sc.nextLine();
+            System.out.print("Data de Nascimento (DD/MM/AAAA): "); 
+            String dataNasc = sc.nextLine();
+
             System.out.print("Idade: ");
-            int idade = Integer.parseInt(sc.nextLine());
+           
+            int idade = Integer.parseInt(sc.nextLine()); 
+            
+            if (idade < 0) {
+                throw new DadoInvalidoException("Idade não pode ser negativa!");
+            }
+
             pacientes[totalPacientes] = new Paciente(nome, cpf, tel, dataNasc, idade);
-        } else {
-            System.out.print("Idade: ");
-            int idade = Integer.parseInt(sc.nextLine());
-            System.out.print("Convenio: ");
-            String conv = sc.nextLine();
-            pacientes[totalPacientes] = new Paciente(nome, cpf, tel, dataNasc, idade, conv);
+            totalPacientes++;
+            sucesso = true;
+            System.out.println("Paciente cadastrado com sucesso!");
+
+        } catch (DadoInvalidoException e) {
+            System.out.println("FALHA NA VALIDAÇÃO: " + e.getMessage());
+        } catch (NumberFormatException e) {
+            System.out.println("ERRO DE ENTRADA: Você digitou um formato inválido onde se esperava um número.");
+        } catch (Exception e) {
+            System.out.println("ERRO INESPERADO: " + e.getMessage());
+        } finally {
+        
+            if (!sucesso) {
+                System.out.println("[SISTEMA] Operação de cadastro abortada com segurança. Nenhum dado corrompido foi salvo.");
+            } else {
+                System.out.println("[SISTEMA] Operação de cadastro finalizada.");
+            }
         }
-        totalPacientes++;
-        System.out.println("Paciente cadastrado com sucesso!");
     }
 
     public static void complementarPaciente() {
@@ -392,72 +410,55 @@ public static void cadastrarProfissional() {
     }
 
     public static void agendarComProfissional() {
-        System.out.print("CPF do paciente: ");
-        String cpf = sc.nextLine();
-        int idxPac = buscarIndicePaciente(cpf);
-        if (idxPac == -1) {
-            System.out.println("Paciente nao encontrado.");
-            return;
-        }
-        if (!pacientes[idxPac].isAtivo()) {
-            System.out.println("Paciente inativo. Nao e possivel agendar.");
-            return;
-        }
+        System.out.println("\n--- JORNADAS 18 e 19: AGENDAMENTO SEGURO ---");
+        try {
+            System.out.print("CPF do paciente: ");
+            String cpf = sc.nextLine();
+            int idxPac = buscarIndicePaciente(cpf);
+            
+            if (idxPac == -1) {
+                throw new PacienteNaoEncontradoException("CPF " + cpf + " não consta em nossa base.");
+            }
+            
+      
+            if (!pacientes[idxPac].isAtivo()) {
+                throw new DadoInvalidoException("Não é possível agendar. O paciente selecionado está INATIVO.");
+            }
 
-        System.out.print("Nome do profissional: ");
-        String nomeProf = sc.nextLine();
-        int idxProf = buscarIndiceProfissional(nomeProf);
-        if (idxProf == -1) {
-            System.out.println("Profissional nao encontrado.");
-            return;
-        }
-        if (profissionais[idxProf].getValorConsulta() == 0) {
-            System.out.println("Profissional sem valor definido. Nao pode agendar.");
-            return;
-        }
-
-        System.out.print("Data (DD/MM/AAAA): ");
-        String data = sc.nextLine();
-        System.out.print("Horario (HH:MM): ");
-        String horario = sc.nextLine();
-
-        // verifica dia da semana
-        String diaSemana = descobrirDiaSemana(data);
-        if (!profissionais[idxProf].atendeNoDia(diaSemana)) {
-            System.out.println("Profissional nao atende nesse dia.");
-            return;
-        }
-
-        // verifica conflito
-        if (temConflito(nomeProf, data, horario)) {
-            System.out.println("Horario ocupado!");
-            String sugestao = sugerirHorario(nomeProf, data);
-            if (sugestao.equals("")) {
-                System.out.println("Nenhum horario disponivel nesse dia.");
+            System.out.print("Nome do profissional: ");
+            String nomeProf = sc.nextLine();
+            int idxProf = buscarIndiceProfissional(nomeProf);
+            
+            if (idxProf == -1) {
+                System.out.println("Profissional não encontrado.");
                 return;
             }
-            System.out.println("Sugestao: " + sugestao);
-            System.out.print("Aceita? (1-Sim / 2-Nao): ");
-            int aceita = Integer.parseInt(sc.nextLine());
-            if (aceita == 1) {
-                horario = sugestao;
-            } else {
-                return;
+
+            System.out.print("Data (DD/MM/AAAA): ");
+            String data = sc.nextLine();
+            System.out.print("Horario (HH:MM): ");
+            String horario = sc.nextLine();
+
+         
+            if (temConflito(nomeProf, data, horario)) {
+                throw new HorarioIndisponivelException("O horário " + horario + " do dia " + data + " já está ocupado para " + nomeProf + ".");
             }
-        }
 
-        System.out.print("Informar tipo? (1-Nao / 2-Sim): ");
-        int infoTipo = Integer.parseInt(sc.nextLine());
-
-        if (infoTipo == 1) {
             consultas[totalConsultas] = new Consulta(cpf, nomeProf, data, horario);
-        } else {
-            System.out.print("Tipo (inicial/retorno/avaliacao): ");
-            String tipo = sc.nextLine();
-            consultas[totalConsultas] = new Consulta(cpf, nomeProf, data, horario, tipo);
+            totalConsultas++;
+            System.out.println("Consulta agendada com sucesso!");
+
+        } catch (PacienteNaoEncontradoException e) {
+            System.out.println("ERRO DE BUSCA: " + e.getMessage());
+        } catch (DadoInvalidoException e) {
+            System.out.println("REGRA DE NEGÓCIO (J18): " + e.getMessage());
+        } catch (HorarioIndisponivelException e) {
+            System.out.println("CONFLITO DE AGENDA (J19): " + e.getMessage());
+            System.out.println("Tente utilizar a busca de horários sugeridos do sistema.");
+        } finally {
+            
+            System.out.println("[SISTEMA] Módulo de agendamento encerrado. Retornando ao menu.");
         }
-        totalConsultas++;
-        System.out.println("Consulta agendada com sucesso!");
     }
 
     public static void agendarPorEspecialidade() {

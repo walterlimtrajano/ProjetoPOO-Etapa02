@@ -56,10 +56,12 @@ public class Paciente extends Pessoa {
         return this.idade;
     }
 
-    public void setIdade(int idade) {
-        this.idade = idade;
+public void setIdade(int idade) throws DadoInvalidoException {
+    if (idade < 0) {
+        throw new DadoInvalidoException("Erro: A idade não pode ser um valor negativo.");
     }
-
+    this.idade = idade;
+}
     public String getConvenioNome() {
         return this.convenioNome;
     }

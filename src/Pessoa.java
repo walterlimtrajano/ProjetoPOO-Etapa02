@@ -25,9 +25,13 @@ public abstract class Pessoa {
         return this.cpf;
     }
 
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
+
+public void setCpf(String cpf) throws DadoInvalidoException {
+    if (cpf == null || cpf.length() != 11) {
+        throw new DadoInvalidoException("Erro: O CPF deve conter 11 caracteres.");
     }
+    this.cpf = cpf;
+}
 
     public String getTelefone() {
         return this.telefone;

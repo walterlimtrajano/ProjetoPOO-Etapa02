@@ -1,23 +1,20 @@
-public class Pagamento {
+public abstract class Pagamento implements Exportavel {
     public int indiceConsulta;
+    public double valorBase;
     public double valorFinal;
     public String tipoPagamento;
     public int parcelas;
 
-    public Pagamento(int indiceConsulta, double valorFinal, String tipoPagamento) {
+    public Pagamento(int indiceConsulta, double valorBase, String tipoPagamento) {
         this.indiceConsulta = indiceConsulta;
-        this.valorFinal = valorFinal;
+        this.valorBase = valorBase;
+        this.valorFinal = valorBase;
         this.tipoPagamento = tipoPagamento;
         this.parcelas = 1;
     }
 
-    // com parcelas (so pra cartao)
-    public Pagamento(int indiceConsulta, double valorFinal, String tipoPagamento, int parcelas) {
-        this.indiceConsulta = indiceConsulta;
-        this.valorFinal = valorFinal;
-        this.tipoPagamento = tipoPagamento;
-        this.parcelas = parcelas;
-    }
+    // cada tipo de pagamento calcula o valor final do seu jeito (polimorfismo)
+    public abstract double calcularValorFinal() throws ConvenioNaoCobreException;
 
     // sem desconto nenhum
     public static double calcularValor(double valorBase) {
@@ -54,5 +51,11 @@ public class Pagamento {
             resumo = resumo + " (R$" + valorParcela + " cada)";
         }
         return resumo;
+    }
+
+    @Override
+    public String exportarDados() {
+        double valorArredondado = Math.round(valorFinal * 100.0) / 100.0;
+        return indiceConsulta + ";" + tipoPagamento + ";" + valorArredondado + ";" + parcelas;
     }
 }

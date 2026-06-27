@@ -795,6 +795,9 @@ public static void cadastrarProfissional() {
             System.out.println("1 - Pagamento direto");
             System.out.println("2 - Pagamento automatico");
             System.out.println("3 - Listar pagamentos");
+            System.out.println("4 - Pagamento em dinheiro (desconto a vista)");
+            System.out.println("5 - Pagamento em cartao (parcelamento)");
+            System.out.println("6 - Pagamento por convenio (cobertura)");
             System.out.println("0 - Voltar");
             System.out.print("Opcao: ");
             op = Integer.parseInt(sc.nextLine());
@@ -803,6 +806,9 @@ public static void cadastrarProfissional() {
                 case 1: pagamentoDireto(); break;
                 case 2: pagamentoAutomatico(); break;
                 case 3: listarPagamentos(); break;
+                case 4: pagamentoDinheiroDesconto(); break;
+                case 5: pagamentoCartaoParcelado(); break;
+                case 6: pagamentoConvenioCobertura(); break;
                 case 0: break;
                 default: System.out.println("Opcao invalida!"); break;
             }
@@ -826,15 +832,15 @@ public static void cadastrarProfissional() {
         if (tipoPag.equals("cartao")) {
             System.out.print("Parcelas (1 a 3): ");
             int parc = Integer.parseInt(sc.nextLine());
-            if (parc < 1) parc = 1;
-            if (parc > 3) parc = 3;
-            pagamentos[totalPagamentos] = new Pagamento(idxConsulta, valor, tipoPag, parc);
-            if (parc > 1) {
-                double vlrParc = Math.round((valor / parc) * 100.0) / 100.0;
-                System.out.println("Pagamento em " + parc + "x de R$" + vlrParc);
+            PagamentoCartao p = new PagamentoCartao(idxConsulta, valor, parc);
+            pagamentos[totalPagamentos] = p;
+            if (p.parcelas > 1) {
+                System.out.println("Pagamento em " + p.parcelas + "x de R$" + p.getValorParcela());
             }
+        } else if (tipoPag.equals("convenio")) {
+            pagamentos[totalPagamentos] = new PagamentoConvenio(idxConsulta, valor, "", 100);
         } else {
-            pagamentos[totalPagamentos] = new Pagamento(idxConsulta, valor, tipoPag);
+            pagamentos[totalPagamentos] = new PagamentoDinheiro(idxConsulta, valor);
         }
         totalPagamentos++;
         System.out.println("Pagamento registrado!");
@@ -893,13 +899,13 @@ public static void cadastrarProfissional() {
         if (tipoPag.equals("cartao")) {
             System.out.print("Parcelas (1 a 3): ");
             int parc = Integer.parseInt(sc.nextLine());
-            if (parc < 1) parc = 1;
-            if (parc > 3) parc = 3;
-            pagamentos[totalPagamentos] = new Pagamento(idxConsulta, valorFinal, tipoPag, parc);
-            double vlrParc = Math.round((valorFinal / parc) * 100.0) / 100.0;
-            System.out.println("Pagamento em " + parc + "x de R$" + vlrParc);
+            PagamentoCartao p = new PagamentoCartao(idxConsulta, valorFinal, parc);
+            pagamentos[totalPagamentos] = p;
+            System.out.println("Pagamento em " + p.parcelas + "x de R$" + p.getValorParcela());
+        } else if (tipoPag.equals("convenio")) {
+            pagamentos[totalPagamentos] = new PagamentoConvenio(idxConsulta, valorFinal, "", 100);
         } else {
-            pagamentos[totalPagamentos] = new Pagamento(idxConsulta, valorFinal, tipoPag);
+            pagamentos[totalPagamentos] = new PagamentoDinheiro(idxConsulta, valorFinal);
         }
         totalPagamentos++;
         System.out.println("Pagamento registrado!");
@@ -912,6 +918,101 @@ public static void cadastrarProfissional() {
         }
         for (int i = 0; i < totalPagamentos; i++) {
             System.out.println(pagamentos[i].exibirResumo());
+        }
+    }
+
+    // JORNADA 21 - desconto a vista no pagamento em dinheiro
+    public static void pagamentoDinheiroDesconto() {
+        System.out.println("\n--- JORNADA 21: PAGAMENTO EM DINHEIRO ---");
+        System.out.print("Indice da consulta: ");
+        int idxConsulta = Integer.parseInt(sc.nextLine());
+
+        if (idxConsulta < 0 || idxConsulta >= totalConsultas) {
+            System.out.println("Indice invalido.");
+            return;
+        }
+
+        System.out.print("Valor base: ");
+        double valor = Double.parseDouble(sc.nextLine());
+        System.out.print("Percentual de desconto a vista (%): ");
+        double desconto = Double.parseDouble(sc.nextLine());
+
+        PagamentoDinheiro pag = new PagamentoDinheiro(idxConsulta, valor, desconto);
+        pag.calcularValorFinal();
+
+        pagamentos[totalPagamentos] = pag;
+        totalPagamentos++;
+
+        System.out.println("Valor base: R$" + valor);
+        System.out.println("Desconto: " + desconto + "%");
+        System.out.println(pag.exibirResumo());
+        System.out.println("Pagamento registrado!");
+    }
+
+    // JORNADA 22 - parcelamento no cartao (com juros acima de 1x)
+    public static void pagamentoCartaoParcelado() {
+        System.out.println("\n--- JORNADA 22: PAGAMENTO EM CARTAO ---");
+        System.out.print("Indice da consulta: ");
+        int idxConsulta = Integer.parseInt(sc.nextLine());
+
+        if (idxConsulta < 0 || idxConsulta >= totalConsultas) {
+            System.out.println("Indice invalido.");
+            return;
+        }
+
+        System.out.print("Valor base: ");
+        double valor = Double.parseDouble(sc.nextLine());
+        System.out.print("Parcelas (1 a 3): ");
+        int parc = Integer.parseInt(sc.nextLine());
+
+        PagamentoCartao pag = new PagamentoCartao(idxConsulta, valor, parc);
+        pag.calcularValorFinal();
+
+        pagamentos[totalPagamentos] = pag;
+        totalPagamentos++;
+
+        System.out.println("Valor base: R$" + valor);
+        if (pag.parcelas > 1) {
+            System.out.println("Parcelado em " + pag.parcelas + "x de R$" + pag.getValorParcela() + " (com juros)");
+        } else {
+            System.out.println("A vista no cartao, sem juros.");
+        }
+        System.out.println(pag.exibirResumo());
+        System.out.println("Pagamento registrado!");
+    }
+
+    // JORNADA 23 - cobertura do convenio (pode lancar excecao se nao cobrir)
+    public static void pagamentoConvenioCobertura() {
+        System.out.println("\n--- JORNADA 23: PAGAMENTO POR CONVENIO ---");
+        System.out.print("Indice da consulta: ");
+        int idxConsulta = Integer.parseInt(sc.nextLine());
+
+        if (idxConsulta < 0 || idxConsulta >= totalConsultas) {
+            System.out.println("Indice invalido.");
+            return;
+        }
+
+        System.out.print("Valor base: ");
+        double valor = Double.parseDouble(sc.nextLine());
+        System.out.print("Nome do convenio: ");
+        String nomeConvenio = sc.nextLine();
+        System.out.print("Percentual de cobertura (%): ");
+        double cobertura = Double.parseDouble(sc.nextLine());
+
+        PagamentoConvenio pag = new PagamentoConvenio(idxConsulta, valor, nomeConvenio, cobertura);
+
+        try {
+            pag.calcularValorFinal();
+            pagamentos[totalPagamentos] = pag;
+            totalPagamentos++;
+
+            System.out.println("Valor base: R$" + valor);
+            System.out.println("Cobertura do convenio: " + cobertura + "%");
+            System.out.println(pag.exibirResumo());
+            System.out.println("Pagamento registrado!");
+        } catch (ConvenioNaoCobreException e) {
+            System.out.println("CONVENIO: " + e.getMessage());
+            System.out.println("Pagamento nao registrado. O paciente deve escolher outra forma de pagamento.");
         }
     }
 

@@ -1,56 +1,48 @@
+import java.util.*;
+
 public class ClinicaServico {
 
-    private Paciente[] pacientes;
-    private int totalPacientes;
+    private Map<String, Paciente> pacientes = new HashMap<>();
+    private Set<String> cpfsCadastrados = new HashSet<>();
+    private Map<String, Profissional> profissionais = new HashMap<>();
+    private List<Consulta> consultas = new ArrayList<>();
 
-    private Profissional[] profissionais;
-    private int totalProfissionais;
-
-    private Consulta[] consultas;
-    private int totalConsultas;
-
-    public ClinicaServico(
-            Paciente[] pacientes,
-            int totalPacientes,
-            Profissional[] profissionais,
-            int totalProfissionais,
-            Consulta[] consultas,
-            int totalConsultas) {
-
-        this.pacientes = pacientes;
-        this.totalPacientes = totalPacientes;
-        this.profissionais = profissionais;
-        this.totalProfissionais = totalProfissionais;
-        this.consultas = consultas;
-        this.totalConsultas = totalConsultas;
+    public ClinicaServico() {
     }
 
-    public int buscarPacientePorCpf(String cpf) {
-        for (int i = 0; i < totalPacientes; i++) {
-            if (pacientes[i].getCpf().equals(cpf)) {
-                return i;
-            }
+    public void adicionarPaciente(Paciente paciente) {
+        if (!cpfsCadastrados.contains(paciente.getCpf())) {
+            pacientes.put(paciente.getCpf(), paciente);
+            cpfsCadastrados.add(paciente.getCpf());
         }
-        return -1;
     }
 
-    public int buscarProfissionalPorNome(String nome) {
-        for (int i = 0; i < totalProfissionais; i++) {
-            if (profissionais[i].getNome().equals(nome)) {
-                return i;
-            }
-        }
-        return -1;
+    public Paciente buscarPacientePorCpf(String cpf) {
+        return pacientes.get(cpf);
+    }
+    
+    public boolean cpfExiste(String cpf) {
+        return cpfsCadastrados.contains(cpf);
+    }
+
+    public Profissional buscarProfissionalPorNome(String nome) {
+        return profissionais.get(nome);
+    }
+    
+    public void adicionarProfissional(Profissional p) {
+        profissionais.put(p.getNome(), p);
+    }
+    
+    public void adicionarConsulta(Consulta c) {
+        consultas.add(c);
     }
 
     public boolean existeConflito(String profissional, String data, String horario) {
-        for (int i = 0; i < totalConsultas; i++) {
-
-            if (consultas[i].nomeProfissional.equals(profissional)
-                    && consultas[i].data.equals(data)
-                    && consultas[i].horario.equals(horario)
-                    && consultas[i].status.equals("agendada")) {
-
+        for (Consulta c : consultas) {
+            if (c.nomeProfissional.equals(profissional)
+                    && c.data.equals(data)
+                    && c.horario.equals(horario)
+                    && c.status.equals("agendada")) {
                 return true;
             }
         }

@@ -52,6 +52,14 @@ public abstract class Profissional extends Pessoa {
     public boolean atendeNoDia(String dia) {
         return horariosDisponiveis.contains(dia);
     }
+    
+    public void adicionarHorario(String horario) {
+        horariosDisponiveis.add(horario);
+    }
+    
+    public void removerHorario(String horario) {
+        horariosDisponiveis.remove(horario);
+    }
 
     // valida as especialidades aceitas pela clinica
     public static boolean especialidadeValida(String esp) {

@@ -392,6 +392,7 @@ public static void cadastrarProfissional() {
             System.out.println("4 - Remarcar");
             System.out.println("5 - Listar todas");
             System.out.println("6 - Buscar por CPF");
+            System.out.println("7 - Exportar consultas (CSV)");
             System.out.println("0 - Voltar");
             System.out.print("Opcao: ");
             op = Integer.parseInt(sc.nextLine());
@@ -403,6 +404,7 @@ public static void cadastrarProfissional() {
                 case 4: remarcarConsulta(); break;
                 case 5: listarConsultas(); break;
                 case 6: buscarConsultasPorPaciente(); break;
+                case 7: exportarConsultas(); break;
                 case 0: break;
                 default: System.out.println("Opcao invalida!"); break;
             }
@@ -650,6 +652,19 @@ public static void cadastrarProfissional() {
         if (!achou) System.out.println("Nenhuma consulta encontrada.");
     }
 
+    // exporta as consultas usando a interface Exportavel
+    public static void exportarConsultas() {
+        if (totalConsultas == 0) {
+            System.out.println("Nenhuma consulta para exportar.");
+            return;
+        }
+        System.out.println("\n=== EXPORTACAO DE CONSULTAS ===");
+        System.out.println("cpf;profissional;data;horario;tipo;status");
+        for (int i = 0; i < totalConsultas; i++) {
+            System.out.println(consultas[i].exportarDados());
+        }
+    }
+
     // verifica se ja tem consulta nesse horario com esse profissional
     public static boolean temConflito(String nomeProf, String data, String horario) {
         for (int i = 0; i < totalConsultas; i++) {
@@ -798,6 +813,7 @@ public static void cadastrarProfissional() {
             System.out.println("4 - Pagamento em dinheiro (desconto a vista)");
             System.out.println("5 - Pagamento em cartao (parcelamento)");
             System.out.println("6 - Pagamento por convenio (cobertura)");
+            System.out.println("7 - Exportar pagamentos (CSV)");
             System.out.println("0 - Voltar");
             System.out.print("Opcao: ");
             op = Integer.parseInt(sc.nextLine());
@@ -809,6 +825,7 @@ public static void cadastrarProfissional() {
                 case 4: pagamentoDinheiroDesconto(); break;
                 case 5: pagamentoCartaoParcelado(); break;
                 case 6: pagamentoConvenioCobertura(); break;
+                case 7: exportarPagamentos(); break;
                 case 0: break;
                 default: System.out.println("Opcao invalida!"); break;
             }
@@ -918,6 +935,19 @@ public static void cadastrarProfissional() {
         }
         for (int i = 0; i < totalPagamentos; i++) {
             System.out.println(pagamentos[i].exibirResumo());
+        }
+    }
+
+    // exporta os pagamentos usando a interface Exportavel
+    public static void exportarPagamentos() {
+        if (totalPagamentos == 0) {
+            System.out.println("Nenhum pagamento para exportar.");
+            return;
+        }
+        System.out.println("\n=== EXPORTACAO DE PAGAMENTOS ===");
+        System.out.println("consulta;tipo;valor;parcelas");
+        for (int i = 0; i < totalPagamentos; i++) {
+            System.out.println(pagamentos[i].exportarDados());
         }
     }
 
